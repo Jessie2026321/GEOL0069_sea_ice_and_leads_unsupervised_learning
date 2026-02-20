@@ -112,7 +112,7 @@ gmm = GaussianMixture(n_components=2, random_state=0)
 gmm.fit(data_cleaned[(flag_cleaned==1)|(flag_cleaned==2)])
 clusters_gmm = gmm.predict(data_cleaned[(flag_cleaned==1)|(flag_cleaned==2)])
   ```
-![](gmm.png)
+![](gmm1.png)
 Fig 2: _GMM clustering in feature space (σ<sup>0</sup> vs pp)._
 
 This figure shows that echoes occupy two distinct regions σ<sup>0</sup> and PP suggiesting two dominant surface scattering regimes.
