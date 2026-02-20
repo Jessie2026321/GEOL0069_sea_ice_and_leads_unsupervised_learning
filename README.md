@@ -1,7 +1,9 @@
 # GEOL0069 Week 4 Sea Ice & Leads Unsupervised Learning
 
 This week project investigates the use of unsupervised leaning methods to classify radar altimetry echoes from Sentinel-3 altimetry satellite data into sea ice and leads. The notebook linked to this Github page is built on the provided notebook _Chapter1_Unsupervised_Learning_Methods_Michel.ipynb_, and focuses on using Gaussian Mixture Models (GMMs) to identify differences in echo shape. 
+<br />
 
+# Background
 <!-- Satellite Altimetry Data -->
 ### Satellite Altimetry Data
 
@@ -39,22 +41,24 @@ In this project:
 - Each component is assumed to represent one surface type (sea ice or lead)
 - The model assigns each echo to the most likely Gaussian component
 GMMs are well suited for this task because they can model overlapping clusters and variations in echo shape.
+<p align="right">(<a href="#readme-top">back to top</a>)</p> 
 
 <!-- Workflow -->
-## Workflow
+# Workflow
 
 ### Overview
 This project follows a waveform-based unsupervised classification workflow to distinguish sea ice and leads using Sentinel-3 SAR altimetry data. Radar waveforms are first transformed into physically meaningful features that describe echo shape and surface scattering behaviour. These features are then clustered using a Gaussian Mixture Model (GMM) to identify natural groupings in the data. Finally, the clustering results are interpreted through waveform shape analysis and compared with the ESA surface-type classification for validation.
 
-- [Envionrment Set Up](#envionment-set-up)
-- [Loading Sentiminel-3 SAR Data](#loading-Sentiminel-3-SAR-Data)
-- [Extracting Waveform Features from Radar Echoes](#Extracting-Waveform-Features-from-Radar-Echoes)
-- [Data Cleaning and Filtering](#Data-Cleaning-and-Filtering)
-- [Applying GMM Clustering](#Applying-GMM-Clustering)
-- [Result Interpretation ](#Result-Interpretation )
-- [Comparison with ESA Classification](#Comparison-with-ESA-Classification)
-  
-### Envionrment Set Up
+1. [Envionrment Set Up](#envionment-set-up)
+2. [Loading Sentiminel-3 SAR Data](#loading-Sentiminel-3-SAR-Data)
+3. [Extracting Waveform Features from Radar Echoes](#Extracting-Waveform-Features-from-Radar-Echoes)
+4. [Data Cleaning and Filtering](#Data-Cleaning-and-Filtering)
+5. [Applying GMM Clustering](#Applying-GMM-Clustering)
+6. [Result Interpretation ](#Result-Interpretation )
+7. [Comparison with ESA Classification](#Comparison-with-ESA-Classification)
+
+<!-- Envionrment Set Up -->  
+## 1. Envionrment Set Up
 Install software packages
 ```sh
 ! pip install rasterio
@@ -66,12 +70,14 @@ Mount Google Drive on Google Colab
 from google.colab import drive
 drive.mount('/content/drive')
   ```
-### Loading Sentiminel-3 SAR Data
+<!-- Loading Sentiminel-3 SAR Data -->
+## 2. Loading Sentiminel-3 SAR Data
 The Sentinel-3 SAR data are loaded from the _enhanced_measurement.nc_ file, which contains waveform information required for echo analysis.
 ```sh
 SAR_data = Dataset(path + SAR_file + '/enhanced_measurement.nc')
   ```
-### Extracting Waveform Features from Radar Echoes
+<!-- Extracting Waveform Features from Radar Echoes -->
+## 3. Extracting Waveform Features from Radar Echoes
 Each echo is described using scalar features:
 - σ<sup>0</sup> (Backscatter Coefficient): radar backscatter strength
 - PP (Peak Power): measures how sharp or peaked the echo is
@@ -88,7 +94,8 @@ then standarised before clustering.
 scaler = StandardScaler()
 data_normalized = scaler.fit_transform(data)
   ```
-### Data Cleaning and Filtering
+<!-- Data Cleaning and Filtering -->
+## 4. Data Cleaning and Filtering
 Only echoes classified by ESA as either sea ice or leads are retained. Other surface types are removed. 
 ```sh
 nan_count = np.isnan(data_normalized).sum()
@@ -104,8 +111,8 @@ data_cleaned = data_cleaned[(flag_cleaned==1)|(flag_cleaned==2)]
 waves_cleaned = waves_cleaned[(flag_cleaned==1)|(flag_cleaned==2)]
 flag_cleaned = flag_cleaned[(flag_cleaned==1)|(flag_cleaned==2)]
   ```
-
-### Applying GMM Clustering
+<!-- Applying GMM Clustering -->
+## 5. Applying GMM Clustering
 The model assigns each echo to the most likely Gaussian distribution without using surface labels. 
 ```sh
 gmm = GaussianMixture(n_components=2, random_state=0)
@@ -116,8 +123,8 @@ clusters_gmm = gmm.predict(data_cleaned[(flag_cleaned==1)|(flag_cleaned==2)])
 Fig 2: _GMM clustering in feature space (σ<sup>0</sup> vs pp)._
 
 This figure shows that echoes occupy two distinct regions σ<sup>0</sup> and PP suggiesting two dominant surface scattering regimes.
-
-### Result Interpretation
+<!-- Result Interpretation -->
+## 6. Result Interpretation
 For each GMM cluster, the mean waveform and its standard deviation are calculated to characterise typical echo shape and variability. 
 ```sh 
 mean_ice = np.mean(waves_cleaned[clusters_gmm==0],axis=0)
@@ -131,7 +138,7 @@ Fig 3: _Mean and Standard Deviation for Both Class_
 
 This figure shows that one class has a narrow, shar-peaked waveform characteristic of leads, while other shows boarder, noisier echoes typical of sea ice. This confirms that GMM clusters correspond to physical suface types. 
 
-### Comparison with ESA Classification
+## 7. Comparison with ESA Classification
 Even ESA labels were not used during clustering, but they still provide reference for evaluation. A confusion matrix compares GMM cluster with eSA classifications. 
 
 ![](con_mat.png)
@@ -140,6 +147,15 @@ Fig 4: _Confusion matrix: GMM vs ESA classification_
 The matrix shows the unsupervised GMM results and the operational eSA classification are aligned which indicate that the clustering successfully captures real surface differences. 
 <p align="right">(<a href="#readme-top">back to top</a>)</p> 
 
+# References 
+Zhong, W., Jiang, M., Xu, K., & Jia, Y. (2023). Arctic sea ice lead detection from Chinese HY-2B radar altimeter data. Remote Sensing, 15(2), 516.
+https://www.mdpi.com/2072-4292/15/2/516
+# Contact
+Jessie So: jessie.so.25@ucl.ac.uk/ tysojessie321@gmail.com
+
+# Acknowledgments 
+This project was developed as part of the GEOL0069 modeule at University College London. The analysis, notebook, and SAR data are based on the teaching materials provided for Week 4. 
+<p align="right">(<a href="#readme-top">back to top</a>)</p> 
 
 
 
