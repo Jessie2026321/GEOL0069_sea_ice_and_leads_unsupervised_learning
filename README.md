@@ -51,13 +51,13 @@ GMMs are well suited for this task because they can model overlapping clusters a
 ### Overview
 This project follows a waveform-based unsupervised classification workflow to distinguish sea ice and leads using Sentinel-3 SAR altimetry data. Radar waveforms are first transformed into physically meaningful features that describe echo shape and surface scattering behaviour. These features are then clustered using a Gaussian Mixture Model (GMM) to identify natural groupings in the data. Finally, the clustering results are interpreted through waveform shape analysis and compared with the ESA surface-type classification for validation.
 
-1. [Environment Set Up](#environment-set-up)
-2. [Loading Sentinel-3 SAR Data](#loading-Sentinel-3-SAR-Data)
-3. [Extracting Waveform Features from Radar Echoes](#Extracting-Waveform-Features-from-Radar-Echoes)
-4. [Data Cleaning and Filtering](#Data-Cleaning-and-Filtering)
-5. [Applying GMM Clustering](#Applying-GMM-Clustering)
-6. [Result Interpretation ](#Result-Interpretation )
-7. [Comparison with ESA Classification](#Comparison-with-ESA-Classification)
+1. [Environment Set Up](#1-environment-set-up)
+2. [Loading Sentinel-3 SAR Data](#2-loading-sentinel-3-sar-data)
+3. [Extracting Waveform Features from Radar Echoes](#3-extracting-waveform-features-from-radar-echoes)
+4. [Data Cleaning and Filtering](#4-data-cleaning-and-filtering)
+5. [Applying GMM Clustering](#5-applying-gmm-clustering)
+6. [Result Interpretation ](#6-result-interpretation )
+7. [Comparison with ESA Classification](#7-comparison-with-esa-classification)
 <br><br>
 
 <!-- Environment Set Up -->  
